@@ -1,3 +1,5 @@
+package Objetos;
+
 public class Premio {
     private int idPremio;
     private String tipo;
@@ -14,6 +16,10 @@ public class Premio {
 
     public int getIdPremio() {
         return idPremio;
+    }
+
+    public void setIdPremio(int idPremio) {
+        this.idPremio = idPremio;
     }
 
     public String getTipo() {

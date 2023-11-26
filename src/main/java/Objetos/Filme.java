@@ -1,9 +1,12 @@
+package Objetos;
+
+import java.util.ArrayList;
+
 public abstract class Filme {
     private int idFilme;
     private String titulo;
-    private Ator ator;
+    private ArrayList<Ator> atores;
     private Categoria categoria;
-    private Premio premio;
 
     public abstract void mostraInfo();
 
@@ -23,12 +26,12 @@ public abstract class Filme {
         this.titulo = titulo;
     }
 
-    public Ator getAtor() {
-        return ator;
+    public ArrayList<Ator> getAtores() {
+        return atores;
     }
 
-    public void setAtor(Ator ator) {
-        this.ator = ator;
+    public void setAtores(ArrayList<Ator> atores) {
+        this.atores = atores;
     }
 
     public Categoria getCategoria() {
@@ -37,13 +40,5 @@ public abstract class Filme {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
-    }
-
-    public Premio getPremio() {
-        return premio;
-    }
-
-    public void setPremio(Premio premio) {
-        this.premio = premio;
     }
 }

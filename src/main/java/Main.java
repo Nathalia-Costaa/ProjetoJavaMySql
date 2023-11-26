@@ -1,3 +1,11 @@
+import DAO.AtorDAO;
+import DAO.RelacaoAtorFilmeDAO;
+import DAO.FilmeDAO;
+import DAO.PremioDAO;
+import Interface.Cinema;
+import Objetos.*;
+
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -5,6 +13,9 @@ public class Main {
 
     public static void main(String[] args) {
         FilmeDAO filmeDAO = new FilmeDAO();
+        AtorDAO atorDAO = new AtorDAO();
+        PremioDAO premioDAO = new PremioDAO();
+        RelacaoAtorFilmeDAO relacaoDAO = new RelacaoAtorFilmeDAO();
         Scanner input = new Scanner(System.in);
         Filme filme;
 
@@ -13,12 +24,13 @@ public class Main {
         System.out.println("");
 
         while(flag) {
-            System.out.println("Lembre de inserir as informacoes com letras minusculas!");
-            System.out.println("Escolha sua opcao");
-            System.out.println("1 - adicionar Filme");
-            System.out.println("2 - mostrar informacoes dos filmes");
-            System.out.println("3 - Atualizar informacoes de um filme");
-            System.out.println("4 - Deletar filme");
+            System.out.println("\nEscolha sua opcao e lembre-se de inserir as informacoes com letras minusculas!");
+            System.out.println("1 - cadastrar Ator");
+            System.out.println("2 - mostrar informacoes dos atores");
+            System.out.println("3 - adicionar Filme");
+            System.out.println("4 - mostrar informacoes dos filmes");
+            System.out.println("5 - Atualizar informacoes de um filme");
+            System.out.println("6 - Deletar filme");
 
             String opStr = input.nextLine();
             int op;
@@ -31,25 +43,79 @@ public class Main {
 
             switch(op){
                 case 1:
+                    System.out.println("Digite o nome do ator: ");
+                    String nome = input.nextLine();
+                    System.out.println("Digite a data de nascimento do ator: ");
+                    String nasc = input.nextLine();
+                    System.out.println("Digite o premio do ator: ");
+                    String nomePremio = input.nextLine();
+
+                    Ator ator = new Ator(nome, nasc);
+                    Premio premio = new Premio(nomePremio);
+                    int id = premioDAO.insertPremio(premio);
+                    premio.setIdPremio(id);
+                    ator.setPremio(premio);
+                    atorDAO.insertAtor(ator);
+
+                    break;
+
+                case 2:
+                    for (Ator ator1 : atorDAO.selectAtor()) {
+                        System.out.println("---------------");
+                        ator1.mostraInfo();
+                    }
+                    System.out.println("---------------");
+
+                    break;
+
+                case 3:
                     filme = generateFilm(input);
                     if (filme == null) {
                         break;
                     }
 
-                    filmeDAO.insertFilme(filme);
+                    id = filmeDAO.insertFilme(filme);
+
+                    for (Ator ator1 : filme.getAtores()) {
+                        filme.setIdFilme(id);
+                        RelacaoAtorFilme relacaoAtorFilme = new RelacaoAtorFilme(ator1, filme);
+                        relacaoDAO.insertRelacao(relacaoAtorFilme);
+                    }
 
                     break;
 
-                case 2:
-                    for (Filme filme1 : filmeDAO.selectFilme()) {
+                case 4:
+                    ArrayList<Filme> filmes = filmeDAO.selectFilme();
+                    ArrayList<Ator> atores = atorDAO.selectAtor();
+                    ArrayList<RelacaoAtorFilme> relacoes = relacaoDAO.selectRelacao();
+
+                    // Relaciona os filmes com o respectivo ator com base nas relacoes
+                    for (Filme filme1 : filmes) {
+                        ArrayList<Ator> atores1 = new ArrayList<>();
+                        for (RelacaoAtorFilme relacao : relacoes) {
+                            if (filme1.getIdFilme() == relacao.getFilme().getIdFilme()) {
+                                for (Ator ator1 : atores) {
+                                    if (ator1.getIdAtor() == relacao.getAtor().getIdAtor()) {
+                                        atores1.add((ator1));
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        filme1.setAtores(atores1);
+                    }
+
+                    for (Filme filme1 : filmes) {
                         System.out.println("---------------");
 
                         if (filme1 != null) {
                             filme1.mostraInfo();
                         } else {
                             System.out.println("Nenhum filme adicionado ainda.");
+                            break;
                         }
 
+                        System.out.println("");
                         if (filme1 instanceof Cinema) {
                             ((Cinema) filme1).passarCinema();
                         } else {
@@ -61,10 +127,9 @@ public class Main {
 
                     break;
 
-                case 3:
+                case 5:
                     System.out.println("Digite o id do filme a ser atualizado: ");
                     String idStr = input.nextLine();
-                    int id;
                     try {
                         id = Integer.parseInt(idStr);
                     } catch (NumberFormatException e) {
@@ -77,12 +142,19 @@ public class Main {
                         break;
                     }
 
+                    // Refaz as relações
+                    relacaoDAO.deleteRelacao(id);
+                    for (Ator ator1 : filme.getAtores()) {
+                        filme.setIdFilme(id);
+                        RelacaoAtorFilme relacaoAtorFilme = new RelacaoAtorFilme(ator1, filme);
+                        relacaoDAO.insertRelacao(relacaoAtorFilme);
+                    }
                     filmeDAO.updateFilme(id, filme);
 
                     break;
 
-                case 4:
-                    System.out.println("Digite o id do filme a ser atualizado: ");
+                case 6:
+                    System.out.println("Digite o id do filme a ser deletado: ");
                     idStr = input.nextLine();
                     try {
                         id = Integer.parseInt(idStr);
@@ -91,6 +163,7 @@ public class Main {
                         break;
                     }
 
+                    relacaoDAO.deleteRelacao(id);
                     filmeDAO.deleteFilme(id);
                     break;
 
@@ -104,14 +177,10 @@ public class Main {
     private static Filme generateFilm(Scanner input) {
         System.out.println("Digite o titulo do filme: ");
         String titulo = input.nextLine();
-        System.out.println("Digite a categoria do filme");
+        System.out.println("Digite a categoria do filme (romance ou comedia)");
         String nome_categoriaCategoria = input.nextLine();
-        System.out.println("Digite o nome do ator: ");
-        String nomeAtor = input.nextLine();
-        System.out.println("Digite a data de nascimento do ator: ");
-        String data_nascimento_ator = input.nextLine();
-        System.out.println("Digite os premios que esse ator possui");
-        String tipoPremio = input.nextLine();
+        System.out.println("Digite os ids dos atores ja cadastrados separados por virgula: ");
+        String idAtores = input.nextLine().replace(" ", "");
 
         Filme filme;
         if (Objects.equals(nome_categoriaCategoria, "comedia")) {
@@ -123,14 +192,27 @@ public class Main {
             return null;
         }
 
-        Ator ator = new Ator(nomeAtor, data_nascimento_ator);
+        ArrayList<Ator> atores = new ArrayList<>();
+        for (String idAtor : idAtores.split(",")) {
+            int id;
+            try {
+                id = Integer.parseInt(idAtor);
+            } catch (NumberFormatException e) {
+                System.out.println("Insira um id valido!");
+                return null;
+            }
+
+            Ator ator = new Ator();
+            ator.setIdAtor(id);
+
+            atores.add(ator);
+        }
+
         Categoria categoria = new Categoria(nome_categoriaCategoria);
-        Premio premio = new Premio (tipoPremio);
 
         filme.setTitulo(titulo);
-        filme.setAtor(ator);
+        filme.setAtores(atores);
         filme.setCategoria(categoria);
-        filme.setPremio(premio);
 
         return filme;
     }
