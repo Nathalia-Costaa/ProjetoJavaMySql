@@ -10,8 +10,8 @@ public class ConnectionDAO {
     ResultSet rs; //resposta do banco
 
     String database = "mydb";//nome do BD
-    String user = "root";
-    String password = "Natha#3860C";
+    String user = "INSERIR USUARIO";
+    String password = "INSERIR SENHA";
     String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
     public boolean check = false;
 
