@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class PremioDAO extends ConnectionDAO {
 
     //DAO - Data Access Object
-    boolean sucesso = false; //Para saber se funcionou
+    private boolean sucesso = false; //Para saber se funcionou
 
     //INSERT
     public int insertPremio(Premio premio) {

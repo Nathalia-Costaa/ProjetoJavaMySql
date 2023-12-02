@@ -9,7 +9,7 @@ import java.util.Objects;
 public class AtorDAO extends ConnectionDAO {
 
     //DAO - Data Access Object
-    boolean sucesso = false; //Para saber se funcionou
+    private boolean sucesso = false; //Para saber se funcionou
 
     //INSERT
     public void insertAtor(Ator ator) {
@@ -18,9 +18,9 @@ public class AtorDAO extends ConnectionDAO {
         String sql = "INSERT INTO ator (nome_ator, data_nascimento_ator, idPremio) values(?, ?, ?)";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, ator.getNome());
-            pst.setString(2, ator.getData_nascimento_ator());
-            pst.setInt(3, ator.getPremio().getIdPremio());
+            pst.setString(1, ator.nome);
+            pst.setString(2, ator.dataNascimentoAtor);
+            pst.setInt(3, ator.premio.getIdPremio());
             pst.execute();
             sucesso = true;
         } catch (SQLException exc) {
@@ -42,9 +42,9 @@ public class AtorDAO extends ConnectionDAO {
         String sql = "UPDATE ator SET nome_ator=?, data_nascimento_ator=?, idPremio=? where idAtor=?";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, ator.getNome());
-            pst.setString(2, ator.getData_nascimento_ator());
-            pst.setInt(3, ator.getPremio().getIdPremio());
+            pst.setString(1, ator.nome);
+            pst.setString(2, ator.dataNascimentoAtor);
+            pst.setInt(3, ator.premio.getIdPremio());
             pst.setInt(4, id);
             pst.execute();
             sucesso = true;
@@ -103,8 +103,8 @@ public class AtorDAO extends ConnectionDAO {
 
                 PremioDAO premioDAO = new PremioDAO();
                 Premio premio = premioDAO.selectPremioPorId(rs.getInt("idPremio"));
-                ator.setPremio(premio);
-                ator.setIdAtor(rs.getInt("idAtor"));
+                ator.premio = premio;
+                ator.idAtor = rs.getInt("idAtor");
 
                 atores.add(ator);
             }
@@ -138,10 +138,10 @@ public class AtorDAO extends ConnectionDAO {
                     rs.getString("nome_ator"),
                     rs.getString("data_nascimento_ator")
             );
-            ator.setIdAtor(rs.getInt("idAtor"));
+            ator.idAtor = rs.getInt("idAtor");
 
             PremioDAO premioDAO = new PremioDAO();
-            ator.setPremio(premioDAO.selectPremioPorId(rs.getInt("idPremio")));
+            ator.premio = premioDAO.selectPremioPorId(rs.getInt("idPremio"));
 
             return ator;
         } catch (SQLException e) {

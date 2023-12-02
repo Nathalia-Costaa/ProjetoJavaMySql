@@ -2,10 +2,10 @@ package Objetos;
 
 public class Categoria {
     private int idCategoria;
-    private String nome_categoria;
+    private String nomeCategoria;
 
     public Categoria(String nome_categoria) {
-        this.nome_categoria = nome_categoria;
+        this.nomeCategoria = nome_categoria;
     }
 
     public void mostraInfo(){
@@ -19,10 +19,7 @@ public class Categoria {
     }
 
     public String getNome_categoria() {
-        return nome_categoria;
+        return nomeCategoria;
     }
 
-    public void setNome_categoria(String nome_categoria) {
-        this.nome_categoria = nome_categoria;
-    }
 }

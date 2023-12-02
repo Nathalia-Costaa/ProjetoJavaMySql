@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Ator` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Categoria` (
   `idCategoria` INT NOT NULL AUTO_INCREMENT,
-  `nome_categoria` VARCHAR(45) NOT NULL,
+  `nomeCategoria` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idCategoria`));
 
 
@@ -77,5 +77,5 @@ CREATE TABLE IF NOT EXISTS `mydb`.`RelacaoAtorFilme` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
-INSERT INTO `mydb`.`categoria` (`nome_categoria`) VALUES ('romance');
-INSERT INTO `mydb`.`categoria` (`nome_categoria`) VALUES ('comedia');
+INSERT INTO `mydb`.`categoria` (`nomeCategoria`) VALUES ('romance');
+INSERT INTO `mydb`.`categoria` (`nomeCategoria`) VALUES ('comedia');

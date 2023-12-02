@@ -3,17 +3,15 @@ package DAO;
 import java.sql.*;
 
 public class ConnectionDAO {
+    public Connection con; //conexão
+    public PreparedStatement pst; // declaração(query) preparada - código em sql
+    public Statement st; //declaração(query) - código em sql
+    public ResultSet rs; //resposta do banco
 
-    Connection con; //conexão
-    PreparedStatement pst; // declaração(query) preparada - código em sql
-    Statement st; //declaração(query) - código em sql
-    ResultSet rs; //resposta do banco
-
-    String database = "mydb";//nome do BD
-    String user = "INSERIR USUARIO";
-    String password = "INSERIR SENHA";
-    String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
-    public boolean check = false;
+    private final String database = "mydb";//nome do BD
+    private final String user = "root";
+    private final String password = "Natha#3860C";
+    private final String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
 
     public void connectToDB() {
         try {
