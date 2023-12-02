@@ -9,8 +9,8 @@ public class ConnectionDAO {
     public ResultSet rs; //resposta do banco
 
     private final String database = "mydb";//nome do BD
-    private final String user = "root";
-    private final String password = "Natha#3860C";
+    private final String user = "insira o usuario";
+    private final String password = "insira a senha";
     private final String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
 
     public void connectToDB() {
