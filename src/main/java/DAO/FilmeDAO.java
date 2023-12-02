@@ -13,7 +13,7 @@ import java.util.Objects;
 public class FilmeDAO extends ConnectionDAO {
 
     //DAO - Data Access Object
-    boolean sucesso = false; //Para saber se funcionou
+    private boolean sucesso = false; //Para saber se funcionou
 
     //INSERT
     public int insertFilme(Filme filme) {
@@ -22,8 +22,8 @@ public class FilmeDAO extends ConnectionDAO {
         String sql = "INSERT INTO filme (titulo, idCategoria) values(?, ?)";
         try {
             pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pst.setString(1, filme.getTitulo());
-            if (Objects.equals(filme.getCategoria().getNome_categoria(), "romance")) {
+            pst.setString(1, filme.titulo);
+            if (Objects.equals(filme.categoria.getNome_categoria(), "romance")) {
                 pst.setString(2, "1");
             } else {
                 pst.setString(2, "2");
@@ -57,8 +57,8 @@ public class FilmeDAO extends ConnectionDAO {
         String sql = "UPDATE filme SET titulo=?, idCategoria=? where idFilme=?";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, filme.getTitulo());
-            if (Objects.equals(filme.getCategoria().getNome_categoria(), "romance")) {
+            pst.setString(1, filme.titulo);
+            if (Objects.equals(filme.categoria.getNome_categoria(), "romance")) {
                 pst.setString(2, "1");
             } else {
                 pst.setString(2, "2");
@@ -125,10 +125,10 @@ public class FilmeDAO extends ConnectionDAO {
                     categoria = new Categoria("comedia");
                 }
 
-                filme.setIdFilme(rs.getInt("idFilme"));
-                filme.setTitulo(rs.getString("titulo"));
+                filme.idFilme = rs.getInt("idFilme");
+                filme.titulo = rs.getString("titulo");
 
-                filme.setCategoria(categoria);
+                filme.categoria = categoria;
 
                 filmes.add(filme);
             }
@@ -168,10 +168,10 @@ public class FilmeDAO extends ConnectionDAO {
                 categoria = new Categoria("comedia");
             }
 
-            filme.setIdFilme(rs.getInt("idFilme"));
-            filme.setTitulo(rs.getString("titulo"));
+            filme.idFilme = rs.getInt("idFilme");
+            filme.titulo = rs.getString("titulo");
 
-            filme.setCategoria(categoria);
+            filme.categoria = categoria;
 
             return filme;
         } catch (SQLException e) {

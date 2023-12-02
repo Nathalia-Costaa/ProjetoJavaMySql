@@ -54,7 +54,7 @@ public class Main {
                     Premio premio = new Premio(nomePremio);
                     int id = premioDAO.insertPremio(premio);
                     premio.setIdPremio(id);
-                    ator.setPremio(premio);
+                    ator.premio = premio;
                     atorDAO.insertAtor(ator);
 
                     break;
@@ -76,8 +76,8 @@ public class Main {
 
                     id = filmeDAO.insertFilme(filme);
 
-                    for (Ator ator1 : filme.getAtores()) {
-                        filme.setIdFilme(id);
+                    for (Ator ator1 : filme.atores) {
+                        filme.idFilme = id;
                         RelacaoAtorFilme relacaoAtorFilme = new RelacaoAtorFilme(ator1, filme);
                         relacaoDAO.insertRelacao(relacaoAtorFilme);
                     }
@@ -93,16 +93,16 @@ public class Main {
                     for (Filme filme1 : filmes) {
                         ArrayList<Ator> atores1 = new ArrayList<>();
                         for (RelacaoAtorFilme relacao : relacoes) {
-                            if (filme1.getIdFilme() == relacao.getFilme().getIdFilme()) {
+                            if (filme1.idFilme == relacao.getFilme().idFilme) {
                                 for (Ator ator1 : atores) {
-                                    if (ator1.getIdAtor() == relacao.getAtor().getIdAtor()) {
+                                    if (ator1.idAtor == relacao.getAtor().idAtor) {
                                         atores1.add((ator1));
                                         break;
                                     }
                                 }
                             }
                         }
-                        filme1.setAtores(atores1);
+                        filme1.atores = atores1;
                     }
 
                     for (Filme filme1 : filmes) {
@@ -144,8 +144,8 @@ public class Main {
 
                     // Refaz as relações
                     relacaoDAO.deleteRelacao(id);
-                    for (Ator ator1 : filme.getAtores()) {
-                        filme.setIdFilme(id);
+                    for (Ator ator1 : filme.atores) {
+                        filme.idFilme = id;
                         RelacaoAtorFilme relacaoAtorFilme = new RelacaoAtorFilme(ator1, filme);
                         relacaoDAO.insertRelacao(relacaoAtorFilme);
                     }
@@ -178,14 +178,14 @@ public class Main {
         System.out.println("Digite o titulo do filme: ");
         String titulo = input.nextLine();
         System.out.println("Digite a categoria do filme (romance ou comedia)");
-        String nome_categoriaCategoria = input.nextLine();
+        String nomeCategoriaCategoria = input.nextLine();
         System.out.println("Digite os ids dos atores ja cadastrados separados por virgula: ");
         String idAtores = input.nextLine().replace(" ", "");
 
         Filme filme;
-        if (Objects.equals(nome_categoriaCategoria, "comedia")) {
+        if (Objects.equals(nomeCategoriaCategoria, "comedia")) {
             filme = new Comedia();
-        } else if (Objects.equals(nome_categoriaCategoria, "romance")) {
+        } else if (Objects.equals(nomeCategoriaCategoria, "romance")) {
             filme = new Romance();
         } else {
             System.out.println("Categoria invalida!");
@@ -203,16 +203,16 @@ public class Main {
             }
 
             Ator ator = new Ator();
-            ator.setIdAtor(id);
+            ator.idAtor = id;
 
             atores.add(ator);
         }
 
-        Categoria categoria = new Categoria(nome_categoriaCategoria);
+        Categoria categoria = new Categoria(nomeCategoriaCategoria);
 
-        filme.setTitulo(titulo);
-        filme.setAtores(atores);
-        filme.setCategoria(categoria);
+        filme.titulo = titulo;
+        filme.atores = atores;
+        filme.categoria = categoria;
 
         return filme;
     }

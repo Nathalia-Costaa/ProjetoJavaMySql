@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class RelacaoAtorFilmeDAO extends ConnectionDAO {
 
     //DAO - Data Access Object
-    boolean sucesso = false; //Para saber se funcionou
+    private boolean sucesso = false; //Para saber se funcionou
 
     //INSERT
     public void insertRelacao(RelacaoAtorFilme relacaoAtorFilme) {
@@ -19,8 +19,8 @@ public class RelacaoAtorFilmeDAO extends ConnectionDAO {
         String sql = "INSERT INTO relacaoatorfilme (idAtor, idFilme) values(?, ?)";
         try {
             pst = con.prepareStatement(sql);
-            pst.setInt(1, relacaoAtorFilme.getAtor().getIdAtor());
-            pst.setInt(2, relacaoAtorFilme.getFilme().getIdFilme());
+            pst.setInt(1, relacaoAtorFilme.getAtor().idAtor);
+            pst.setInt(2, relacaoAtorFilme.getFilme().idFilme);
             pst.execute();
             sucesso = true;
         } catch (SQLException exc) {
@@ -72,7 +72,7 @@ public class RelacaoAtorFilmeDAO extends ConnectionDAO {
     }
 
     //DELETE
-    public boolean deleteRelacao(int idFilme) {
+    public void deleteRelacao(int idFilme) {
         connectToDB();
         String sql = "DELETE FROM relacaoatorfilme where idFilme=?";
         try {
@@ -91,6 +91,5 @@ public class RelacaoAtorFilmeDAO extends ConnectionDAO {
                 System.out.println("Erro: " + exc.getMessage());
             }
         }
-        return sucesso;
     }
 }
